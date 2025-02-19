@@ -3,12 +3,10 @@ dotenv.config();
 import express from "express";
 const app = express();
 import morgan from "morgan";
-import { nanoid } from "nanoid";
 
-let jobs = [
-  { id: nanoid(), company: "apple", position: "front-end" },
-  { id: nanoid(), company: "google", position: "back-end" },
-];
+//routers
+import jobRouter from "./routes/jobRouter.js";
+import mongoose from "mongoose";
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev")); //console da Response kodu ve resposne süresi (ms) gözükür
@@ -25,12 +23,27 @@ app.post("/", (req, res) => {
   res.json({ message: "data receiverd", data: req.body });
 });
 
-app.get("/api/v1/jobs", (req, res) => {
-  res.status(200).json({ jobs });
+app.use("/api/v1/jobs", jobRouter);
+
+// app.use("*", (req, res) => {
+//   //any method any urls
+//   res.status(404).json({ msg: "not found" }); //notfound middleware route yokken calısır
+// }); //express aynı msj ı yollyuor gerek yok
+
+app.use((err, req, res, next) => {
+  //error middleware  route varken hata olsutgunda
+  console.log(err);
+  res.status(500).json({ msg: "smthg went wrong" });
 });
 
 const port = process.env.PORT || 5100;
 
-app.listen(port, () => {
-  console.log(`server running on PORT ${port}...`);
-});
+try {
+  await mongoose.connect(process.env.MONGO_URL);
+  app.listen(port, () => {
+    console.log(`server running on PORT ${port}...`);
+  });
+} catch (error) {
+  console.log(error);
+  process.exit(1);
+}
