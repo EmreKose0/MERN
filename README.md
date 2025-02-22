@@ -3142,6 +3142,7 @@ app.use('/api/v1/jobs', authenticateUser, jobRouter);
 [Cookie Parser](https://www.npmjs.com/package/cookie-parser)
 
 ```sh
+//to read token from cookie
 npm i cookie-parser@1.4.6
 ```
 

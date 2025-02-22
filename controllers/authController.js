@@ -22,7 +22,21 @@ export const login = async (req, res) => {
     user && (await await comparePassword(req.body.password, user.password));
   if (!isValidUser) throw new UnauthenticatedError("invalid credentials");
 
-  const token = createJWT({ userId: user._id, role: user.role });
+  const token = createJWT({ userId: user._id, role: user.role }); //createJWT
 
-  res.json({ token });
+  const oneDay = 1000 * 60 * 60 * 24; //1 day in ms
+  res.cookie("token", token, {
+    httpOnly: true,
+    expires: new Date(Date.now() + oneDay),
+    secure: process.env.NODE_ENV === "production",
+  }); //HttpeCookie üzerinden bu front token i tasımıs oluyoruz.HttpOnly güvenli, dısarıdan ulasılamaz olmasını sağlıyor
+  res.status(StatusCodes.OK).json({ msg: "user logged in" });
+};
+
+export const logout = (req, res) => {
+  res.cookie("token", "logout", {
+    httpOnly: true,
+    expires: new Date(Date.now()),
+  });
+  res.status(StatusCodes.OK).json({ msg: "user logged out!" });
 };

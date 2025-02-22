@@ -9,16 +9,20 @@ import morgan from "morgan";
 //routers
 import jobRouter from "./routes/jobRouter.js";
 import authRouter from "./routes/authRouter.js";
+import userRouter from "./routes/userRouter.js";
 
 //Middleware
 import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js";
+import { authenticateUser } from "./middleware/authMiddleware.js";
 
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev")); //console da Response kodu ve resposne süresi (ms) gözükür
 }
 
+app.use(cookieParser());
 app.use(express.json()); //json formatındaki istekleri karsılamak ıcın /middleware olarak kullanılır
 
 app.get("/", (req, res) => {
@@ -32,7 +36,8 @@ app.get("/", (req, res) => {
 //   res.json({ message: `hello ${name}` });
 // });
 
-app.use("/api/v1/jobs", jobRouter);
+app.use("/api/v1/jobs", authenticateUser, jobRouter); //jobRouterlarda auth kullanacagıız ıcın basına yazdık
+app.use("/api/v1/users", authenticateUser, userRouter);
 app.use("/api/v1/auth", authRouter);
 
 // app.use("*", (req, res) => {
