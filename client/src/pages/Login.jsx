@@ -1,18 +1,48 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  Form,
+  redirect,
+  useNavigation,
+  useActionData,
+} from "react-router-dom";
 import Wrapper from "../assets/wrappers/RegisterAndLoginPage";
-import { Logo, FormRow } from "../components";
+import { FormRow, Logo } from "../components";
+import customFetch from "../utils/customFetch";
+import { toast } from "react-toastify";
 
+export const action = async ({ request }) => {
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+  const errors = { msg: "" };
+  if (data.password.length < 3) {
+    errors.msg = "password too short";
+    return errors;
+  }
+  try {
+    await customFetch.post("/auth/login", data);
+    toast.success("Login successful");
+    return redirect("/dashboard");
+  } catch (error) {
+    toast.error(error?.response?.data?.msg);
+    return error;
+  }
+  return null;
+};
 function Login() {
+  const navigation = useNavigation();
+  const isSubmitting = navigation.state === "submitting";
+  // const errors = useActionData();  //burası hook kullanarak databaseden veri cekilebilir ama biz toast kullandık
   return (
     <Wrapper>
-      <form className="form">
+      <Form method="post" className="form">
         <Logo />
         <h4>Login </h4>
+        {/* {errors?.msg && <p style={{ color: "red" }}> {errors.msg}</p>}
+        <p></p> */}
         <FormRow type="email" name="email" defaultValue="emre@gmail.com" />
         <FormRow type="password" name="password" defaultValue="123456" />
-        <button type="submit" className="btn btn-block">
-          Submit
+        <button type="submit" className="btn btn-block" disabled={isSubmitting}>
+          {isSubmitting ? "submitting" : "submit"}
         </button>
         <button type="button" className="btn btn-block">
           explore the app
@@ -23,7 +53,7 @@ function Login() {
             Register
           </Link>
         </p>
-      </form>
+      </Form>
     </Wrapper>
   );
 }

@@ -14,13 +14,17 @@ import {
   Admin,
 } from "./pages";
 
+import { action as registerAction } from "./pages/Register";
+import { action as loginAction } from "./pages/Login";
+import { loader as dashboardLoader } from "./pages/DashboardLayout";
+
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem("darkTheme") === "true";
   document.body.classList.toggle("dark-theme", isDarkTheme);
   return isDarkTheme;
 };
 
-checkDefaultTheme()
+checkDefaultTheme();
 
 const router = createBrowserRouter([
   {
@@ -35,14 +39,21 @@ const router = createBrowserRouter([
       {
         path: "register",
         element: <Register />,
+        action: registerAction, //action ı hersayfada kensinine özel belirledik
+        // action: () => {
+        //   console.log("hello there"); //olusacak action ı sec
+        //   return null; //return etmek zorunda hata almamak ıcın
+        // },
       },
       {
         path: "login",
         element: <Login />,
+        action: loginAction,
       },
       {
         path: "dashboard",
-        element: <DashboardLayout  />,
+        element: <DashboardLayout />,
+        loader: dashboardLoader,
         children: [
           {
             index: true,
