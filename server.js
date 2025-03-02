@@ -29,9 +29,9 @@ app.get("/", (req, res) => {
   res.send("hello world");
 });
 
-app.get("/api/v1/test", (req, res) => {
-  res.json({ msg: "test route" });
-});
+// app.get("/api/v1/test", (req, res) => {
+//   res.json({ msg: "test route" });
+// });
 // import { validateTest } from "./middleware/validationMiddleware.js";
 
 // app.post("/api/v1/test", validateTest, (req, res) => {

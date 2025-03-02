@@ -6,8 +6,8 @@ import { ToastContainer } from "react-toastify";
 import App from "./App.jsx";
 import customFetch from "./utils/customFetch.js";
 
-const resp = await customFetch.get("/test");
-console.log(resp);
+// const resp = await customFetch.get("/test");
+// console.log(resp);
 // fetch("/api/v1/test")
 //   .then((res) => res.json())
 //   .then((data) => console.log(data));
