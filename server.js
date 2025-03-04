@@ -11,6 +11,11 @@ import jobRouter from "./routes/jobRouter.js";
 import authRouter from "./routes/authRouter.js";
 import userRouter from "./routes/userRouter.js";
 
+//public
+import { dirname } from "path";
+import { fileURLToPath } from "url";
+import path from "path";
+
 //Middleware
 import errorHandlerMiddleware from "./middleware/errorHandlerMiddleware.js";
 import { authenticateUser } from "./middleware/authMiddleware.js";
@@ -18,9 +23,13 @@ import { authenticateUser } from "./middleware/authMiddleware.js";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 
+const __dirname = dirname(fileURLToPath(import.meta.url)); //ES6 için gerekli
+
 if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev")); //console da Response kodu ve resposne süresi (ms) gözükür
 }
+
+app.use(express.static(path.resolve(__dirname, "./public"))); //ES6 için public işlemi
 
 app.use(cookieParser());
 app.use(express.json()); //json formatındaki istekleri karsılamak ıcın /middleware olarak kullanılır
