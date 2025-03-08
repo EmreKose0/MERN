@@ -4936,6 +4936,7 @@ export const action = async ({ request }) => {
 npm i multer@1.4.5
 ```
 
+file işlemek için middleware
 Multer is a popular middleware package for handling multipart/form-data in Node.js web applications. It is commonly used for handling file uploads. Multer simplifies the process of accepting and storing files submitted through HTTP requests by providing an easy-to-use API. It integrates seamlessly with Express.js and allows developers to define upload destinations, file size limits, and other configurations.
 
 - create middleware/multerMiddleware.js

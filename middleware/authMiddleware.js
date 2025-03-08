@@ -1,6 +1,7 @@
 import {
   UnauthenticatedError,
   UnauthorizedError,
+  BadRequestError,
 } from "../errors/customErrors.js";
 import { verifyJWT } from "../utils/tokenUtils.js";
 
@@ -10,7 +11,8 @@ export const authenticateUser = (req, res, next) => {
 
   try {
     const { userId, role } = verifyJWT(token);
-    req.user = { userId, role };
+    const testUser = userId === "67cc4c3e05b498cc89ec659b"; //testuser icin mongoDbden cektik
+    req.user = { userId, role, testUser };
 
     next(); //if OK, next middleware
   } catch (error) {
@@ -25,4 +27,10 @@ export const authorizePermissions = (...roles) => {
     }
     next();
   };
+};
+
+export const checkForTestUser = (req, res, next) => {
+  if (req.user.testUser) throw new BadRequestError("Demo User. Read Only!");
+
+  next();
 };
