@@ -4,9 +4,48 @@ import mongoose from "mongoose";
 import day from "dayjs";
 
 export const getAllJobs = async (req, res) => {
-  console.log(req.user);
-  const job = await Job.find({ createdBy: req.user.userId }); //parametere vermezsek select gibi calısır,kim yarattıysa onunkileri filtreler
-  res.status(StatusCodes.OK).json({ job });
+  const { search, jobStatus, jobType, sort } = req.query;
+  const queryObject = {
+    createdBy: req.user.userId,
+  };
+
+  if (search) {
+    // queryObject.position = req.query.search; //search islemi icin position kısmı eklendı
+    queryObject.$or = [
+      { position: { $regex: search, $options: "i" } }, //regex tam eslesme degilde , icinde bulunanları getirmeyi saglar
+      { company: { $regex: search, $options: "i" } }, //options: "i"  büyük harf kücük harf farkını ortadan kaldırır
+    ];
+  }
+
+  if (jobStatus && jobStatus !== "all") {
+    queryObject.jobStatus = jobStatus;
+  }
+  if (jobType && jobType !== "all") {
+    queryObject.jobType = jobType;
+  }
+
+  const sortOptions = {
+    newest: "-createdAt",
+    oldest: "createdAt",
+    "a-z": "position",
+    "z-a": "-position",
+  };
+
+  const sortKey = sortOptions[sort] || sortOptions.newest;
+
+  //setup pagination
+
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  const job = await Job.find(queryObject).sort(sortKey).skip(skip).limit(limit); //parametere vermezsek select gibi calısır,kim yarattıysa onunkileri filtreler
+
+  const totalJobs = await Job.countDocuments(queryObject); //filtreden sonra dönen job sayısı
+  const numOfPages = Math.ceil(totalJobs / limit);
+  res
+    .status(StatusCodes.OK)
+    .json({ totalJobs, numOfPages, currentPage: page, job });
 };
 
 export const createJob = async (req, res) => {
