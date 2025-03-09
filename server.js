@@ -9,7 +9,6 @@ import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cloudinary from "cloudinary";
 
-
 //routers
 import jobRouter from "./routes/jobRouter.js";
 import authRouter from "./routes/authRouter.js";
@@ -29,8 +28,6 @@ cloudinary.config({
   api_key: process.env.CLOUD_API_KEY,
   api_secret: process.env.CLOUD_API_SECRET,
 });
-
-
 
 const __dirname = dirname(fileURLToPath(import.meta.url)); //ES6 için gerekli
 
@@ -60,6 +57,10 @@ app.get("/", (req, res) => {
 app.use("/api/v1/jobs", authenticateUser, jobRouter); //jobRouterlarda auth kullanacagıız ıcın basına yazdık
 app.use("/api/v1/users", authenticateUser, userRouter);
 app.use("/api/v1/auth", authRouter);
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "./public", "index.html")); //hangi root verilirse verilsin index.hmtl calısır, en son deploy ederken yaptık
+});
 
 // app.use("*", (req, res) => {
 //   //any method any urls
