@@ -15,17 +15,17 @@ import {
   EditJob,
 } from "./pages";
 
-import { action as registerAction } from "./pages/Register";
-import { action as loginAction } from "./pages/Login";
-import { loader as dashboardLoader } from "./pages/DashboardLayout";
-import { action as addJobAction } from "./pages/AddJob";
-import { loader as allJobsLoader } from "./pages/AllJobs";
-import { loader as editJobLoader } from "./pages/EditJob";
-import { action as editJobAction } from "./pages/EditJob";
-import { action as deleteJobAction } from "./pages/DeleteJob";
-import { loader as adminLoader } from "./pages/Admin";
-import { action as profileAction } from "./pages/Profile";
-import { loader as statsLoader } from "./pages/Stats";
+import { action as registerAction } from "./pages/Register.jsx";
+import { action as loginAction } from "./pages/Login.jsx";
+import { loader as dashboardLoader } from "./pages/DashboardLayout.jsx";
+import { action as addJobAction } from "./pages/AddJob.jsx";
+import { loader as allJobsLoader } from "./pages/AllJobs.jsx";
+import { loader as editJobLoader } from "./pages/EditJob.jsx";
+import { action as editJobAction } from "./pages/EditJob.jsx";
+import { action as deleteJobAction } from "./pages/DeleteJob.jsx";
+import { loader as adminLoader } from "./pages/Admin.jsx";
+import { action as profileAction } from "./pages/Profile.jsx";
+import { loader as statsLoader } from "./pages/Stats.jsx";
 
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem("darkTheme") === "true";
