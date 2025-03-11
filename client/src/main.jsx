@@ -13,8 +13,8 @@ import customFetch from "./utils/customFetch.js";
 //   .then((data) => console.log(data));
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  <>
     <App />
     <ToastContainer position="top-center" />
-  </StrictMode>
+  </>
 );

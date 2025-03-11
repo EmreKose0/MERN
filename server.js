@@ -8,6 +8,8 @@ import morgan from "morgan";
 import mongoose from "mongoose";
 import cookieParser from "cookie-parser";
 import cloudinary from "cloudinary";
+import helmet from "helmet";
+import mongSanitize from "express-mongo-sanitize";
 
 //routers
 import jobRouter from "./routes/jobRouter.js";
@@ -39,10 +41,12 @@ app.use(express.static(path.resolve(__dirname, "./public"))); //ES6 için public
 
 app.use(cookieParser());
 app.use(express.json()); //json formatındaki istekleri karsılamak ıcın /middleware olarak kullanılır
+app.use(helmet()); //http icin security
+app.use(mongSanitize()); //noSQL injection için $ . gibi karakterleri kaldırarak security
 
-app.get("/", (req, res) => {
-  res.send("hello world");
-});
+// app.get("/", (req, res) => {
+//   res.send("hello world");
+// });
 
 // app.get("/api/v1/test", (req, res) => {
 //   res.json({ msg: "test route" });

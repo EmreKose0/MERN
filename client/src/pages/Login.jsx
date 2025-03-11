@@ -10,24 +10,28 @@ import { FormRow, Logo, SubmitBtn } from "../components";
 import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
 
-export const action = async ({ request }) => {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-  const errors = { msg: "" };
-  if (data.password.length < 3) {
-    errors.msg = "password too short";
-    return errors;
-  }
-  try {
-    await customFetch.post("/auth/login", data);
-    toast.success("Login successful");
-    return redirect("/dashboard");
-  } catch (error) {
-    toast.error(error?.response?.data?.msg);
-    return error;
-  }
-  return null;
-};
+export const action =
+  (queryClient) =>
+  async ({ request }) => {
+    const formData = await request.formData();
+
+    const data = Object.fromEntries(formData);
+    const errors = { msg: "" };
+    if (data.password.length < 3) {
+      errors.msg = "password too short";
+      return errors;
+    }
+    try {
+      await customFetch.post("/auth/login", data);
+      queryClient.invalidateQueries(); //cache temizlemek icin, yoksa React query deki bilgiler kalır
+      toast.success("Login successful");
+      return redirect("/dashboard");
+    } catch (error) {
+      toast.error(error?.response?.data?.msg);
+      return error;
+    }
+    return null;
+  };
 function Login() {
   // const errors = useActionData();  //burası hook kullanarak databaseden veri cekilebilir ama biz toast kullandık
   const navigate = useNavigate();
@@ -38,7 +42,7 @@ function Login() {
     };
     try {
       await customFetch.post("/auth/login", data);
-      toast.success("Take a tes drive");
+      toast.success("Take a test drive");
       navigate("/dashboard");
     } catch (error) {
       toast.error(error?.response?.data?.msg);

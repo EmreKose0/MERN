@@ -9,17 +9,20 @@ import React from "react";
 
 //useOutletCOntext -> dashboardlayout taki <Outlet context= {{}} erişimi sağlar
 
-export const action = async ({ request }) => {
-  const formData = await request.formData();
-  const data = Object.fromEntries(formData);
-  try {
-    await customFetch.post("/jobs", data);
-    toast.success("job added succesfully");
-    return null;
-  } catch (error) {}
-  toast.error(error?.response?.data?.msg);
-  return error;
-};
+export const action =
+  (queryClient) =>
+  async ({ request }) => {
+    const formData = await request.formData();
+    const data = Object.fromEntries(formData);
+    try {
+      await customFetch.post("/jobs", data);
+      queryClient.invalidateQueries(["jobs"]);
+      toast.success("job added succesfully");
+      return redirect("all-jobs");
+    } catch (error) {}
+    toast.error(error?.response?.data?.msg);
+    return error;
+  };
 
 function AddJob() {
   const { user } = useOutletContext();
