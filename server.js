@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === "development") {
   app.use(morgan("dev")); //console da Response kodu ve resposne süresi (ms) gözükür
 }
 
-app.use(express.static(path.resolve(__dirname, "./public"))); //ES6 için public işlemi
+app.use(express.static(path.resolve(__dirname, "./client/dist"))); //ES6 için public işlemi
 
 app.use(cookieParser());
 app.use(express.json()); //json formatındaki istekleri karsılamak ıcın /middleware olarak kullanılır
@@ -59,7 +59,7 @@ app.use("/api/v1/users", authenticateUser, userRouter);
 app.use("/api/v1/auth", authRouter);
 
 app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "./public", "index.html")); //hangi root verilirse verilsin index.hmtl calısır, en son deploy ederken yaptık
+  res.sendFile(path.resolve(__dirname, "./client/dist", "index.html")); //hangi root verilirse verilsin index.hmtl calısır, en son deploy ederken yaptık
 });
 
 // app.use("*", (req, res) => {
