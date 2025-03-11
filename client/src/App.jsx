@@ -8,11 +8,11 @@ import {
   DashboardLayout,
   Error,
   AddJob,
-  Stats,
   AllJobs,
   Profile,
   Admin,
   EditJob,
+  Stats,
 } from "./pages";
 
 import { action as registerAction } from "./pages/Register.jsx";
@@ -25,15 +25,7 @@ import { action as editJobAction } from "./pages/EditJob.jsx";
 import { action as deleteJobAction } from "./pages/DeleteJob.jsx";
 import { loader as adminLoader } from "./pages/Admin.jsx";
 import { action as profileAction } from "./pages/Profile.jsx";
-// import { loader as statsLoader } from "./pages/Stats.jsx";
-
-import fs from "fs";
-
-console.log("Current directory:", process.cwd());
-console.log("Files in src/pages:", fs.readdirSync("./src/pages"));
-
-import Stats from "./pages/Stats";
-
+import { loader as statsLoader } from "./pages/Stats.jsx";
 
 export const checkDefaultTheme = () => {
   const isDarkTheme = localStorage.getItem("darkTheme") === "true";
